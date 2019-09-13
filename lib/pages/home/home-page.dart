@@ -43,15 +43,30 @@ class HomePage extends StatelessWidget {
         stream: homeBloc.outVideos,
         initialData: [],
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (!snapshot.hasData || snapshot.data.length == 0) {
             return Center(
-              child: Text("Busque por algo e vai aparecer aqui!"),
+              child: Text(
+                "Busque por algo e vai aparecer aqui!",
+                style: TextStyle(color: Colors.white),
+              ),
             );
           } else {
             return ListView.builder(
-              itemCount: snapshot.data.length,
+              itemCount: snapshot.data.length + 1,
               itemBuilder: (context, index) {
-                return VideoTile(snapshot.data[index]);
+                if (index < snapshot.data.length)
+                  return VideoTile(snapshot.data[index]);
+                else {
+                  homeBloc.inSearch.add(null);
+                  return Container(
+                    padding: EdgeInsets.all(10),
+                    width: 40,
+                    height: 60,
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.red)),
+                  );
+                }
               },
             );
           }
