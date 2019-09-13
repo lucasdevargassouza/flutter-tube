@@ -1,8 +1,13 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertube/pages/home/favoritos-bloc.dart';
 import 'package:fluttertube/shared/models/video-model.dart';
 
 class VideoTile extends StatelessWidget {
   final VideoModel _videoModel;
+  //final FavoritosBloc _favoritosBloc = FavoritosBloc();
+  final FavoritosBloc _favoritosBloc = BlocProvider.getBloc<FavoritosBloc>();
+
 
   VideoTile(this._videoModel);
 
@@ -49,12 +54,26 @@ class VideoTile extends StatelessWidget {
                   ),
                 ),
               ),
-              IconButton(
-                icon: Icon(Icons.star_border),
-                iconSize: 30,
-                onPressed: () {},
-                color: Colors.white,
-              ),
+              StreamBuilder<Map<String, VideoModel>>(
+                  stream: _favoritosBloc.outFav,
+                  initialData: {},
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return IconButton(
+                        icon: Icon(
+                          snapshot.data.containsKey(_videoModel.id)
+                              ? Icons.star
+                              : Icons.star_border,
+                        ),
+                        iconSize: 30,
+                        onPressed: () =>
+                            _favoritosBloc.toggleFavorito(_videoModel),
+                        color: Colors.white,
+                      );
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  }),
             ],
           ),
         ],

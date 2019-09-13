@@ -5,7 +5,8 @@ import 'package:fluttertube/shared/models/video-model.dart';
 import 'package:fluttertube/shared/widgets/video-tile.dart';
 
 class HomePage extends StatelessWidget {
-  final HomeBloc homeBloc = HomeBloc();
+  final HomeBloc _homeBloc = HomeBloc();
+  // final HomeBloc homeBloc = BlocProvider.getBloc<HomeBloc>(); Não funciona!
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +35,13 @@ class HomePage extends StatelessWidget {
               String result =
                   await showSearch(context: context, delegate: DataSearch());
 
-              if (result != null) homeBloc.inSearch.add(result);
+              if (result != null) _homeBloc.inSearch.add(result);
             },
           ),
         ],
       ),
       body: StreamBuilder<List<VideoModel>>(
-        stream: homeBloc.outVideos,
+        stream: _homeBloc.outVideos,
         initialData: [],
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data.length == 0) {
@@ -57,7 +58,7 @@ class HomePage extends StatelessWidget {
                 if (index < snapshot.data.length)
                   return VideoTile(snapshot.data[index]);
                 else {
-                  homeBloc.inSearch.add(null);
+                  _homeBloc.inSearch.add(null);
                   return Container(
                     padding: EdgeInsets.all(10),
                     width: 40,

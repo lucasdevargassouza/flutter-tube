@@ -1,5 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertube/pages/home/favoritos-bloc.dart';
 import 'package:fluttertube/pages/home/home-bloc.dart';
 import 'package:fluttertube/pages/home/home-page.dart';
 import 'package:fluttertube/shared/services/apis/api-youtube.dart';
@@ -17,7 +18,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       blocs: [
-        Bloc((i) => HomeBloc(), singleton: false),
+        Bloc((i) => HomeBloc()),
+        Bloc((i) => FavoritosBloc()),
       ],
       child: MaterialApp(
         title: 'Flutter Tube',

@@ -3,17 +3,16 @@ import 'dart:async';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:fluttertube/shared/models/video-model.dart';
 import 'package:fluttertube/shared/services/apis/api-youtube.dart';
-import 'package:rxdart/rxdart.dart';
 
 class HomeBloc implements BlocBase {
   ApiYouTube api;
   List<VideoModel> videos;
 
   final StreamController<List<VideoModel>> _videosController =
-      BehaviorSubject<List<VideoModel>>();
+      StreamController<List<VideoModel>>();
   Stream get outVideos => _videosController.stream;
 
-  final StreamController<String> _searchController = BehaviorSubject<String>();
+  final StreamController<String> _searchController = StreamController<String>();
   Sink get inSearch => _searchController.sink;
 
   HomeBloc() {
