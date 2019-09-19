@@ -1,15 +1,19 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertube/pages/favorites/favorites-page.dart';
+import 'package:fluttertube/pages/home/favoritos-bloc.dart';
 import 'package:fluttertube/pages/home/home-bloc.dart';
 import 'package:fluttertube/shared/delegates/data-search.dart';
 import 'package:fluttertube/shared/models/video-model.dart';
 import 'package:fluttertube/shared/widgets/video-tile.dart';
 
-class HomePage extends StatelessWidget {
-  final HomeBloc _homeBloc = HomeBloc();
-  // final HomeBloc homeBloc = BlocProvider.getBloc<HomeBloc>(); Não funciona!
 
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+  final HomeBloc _homeBloc = BlocProvider.getBloc<HomeBloc>();
+  final FavoritosBloc _favoritosBloc = BlocProvider.getBloc<FavoritosBloc>();
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -21,12 +25,20 @@ class HomePage extends StatelessWidget {
         elevation: 0,
         actions: <Widget>[
           Align(
-            child: Text("0"),
+            child: StreamBuilder<Map<String, VideoModel>>(
+              stream: _favoritosBloc.outFav,
+              builder: (constext, snapshot) {
+                if (snapshot.hasData)
+                  return Text("${snapshot.data.length}");
+                else
+                  return Text("0");
+              },
+            ),
           ),
           IconButton(
             tooltip: "Favoritos",
             icon: Icon(Icons.star),
-            onPressed: () {},
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FavoritesPage())),
           ),
           IconButton(
             tooltip: "Buscar vídeo",

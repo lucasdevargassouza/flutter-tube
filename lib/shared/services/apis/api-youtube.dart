@@ -27,6 +27,7 @@ class ApiYouTube {
     http.Response response = await http.get(url);
     return decode(response);
   }
+  
   Future<List> getSuggestionsFromYoutube(String search) async {
     http.Response response = await http.get(
         "http://suggestqueries.google.com/complete/search?hl=en&ds=yt&client=youtube&hjson=t&cp=1&q=$search&format=5&alt=json");

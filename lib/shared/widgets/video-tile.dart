@@ -1,13 +1,13 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_youtube/flutter_youtube.dart';
 import 'package:fluttertube/pages/home/favoritos-bloc.dart';
 import 'package:fluttertube/shared/models/video-model.dart';
+import 'package:fluttertube/shared/services/apis/api-youtube.dart';
 
 class VideoTile extends StatelessWidget {
   final VideoModel _videoModel;
-  //final FavoritosBloc _favoritosBloc = FavoritosBloc();
   final FavoritosBloc _favoritosBloc = BlocProvider.getBloc<FavoritosBloc>();
-
 
   VideoTile(this._videoModel);
 
@@ -19,13 +19,18 @@ class VideoTile extends StatelessWidget {
         children: <Widget>[
           AspectRatio(
             aspectRatio: 16.0 / 9.0,
-            child: Image.network(_videoModel.thumb, fit: BoxFit.cover),
+            child: InkWell(
+              onTap: () => FlutterYoutube.playYoutubeVideoById(
+                  apiKey: API_KEY, videoId: _videoModel.id),
+              child: Image.network(_videoModel.thumb, fit: BoxFit.cover),
+            ),
           ),
           Row(
             children: <Widget>[
               Expanded(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () => FlutterYoutube.playYoutubeVideoById(
+                      apiKey: API_KEY, videoId: _videoModel.id),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -56,7 +61,6 @@ class VideoTile extends StatelessWidget {
               ),
               StreamBuilder<Map<String, VideoModel>>(
                   stream: _favoritosBloc.outFav,
-                  initialData: {},
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return IconButton(

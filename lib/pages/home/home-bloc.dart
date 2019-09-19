@@ -5,7 +5,7 @@ import 'package:fluttertube/shared/models/video-model.dart';
 import 'package:fluttertube/shared/services/apis/api-youtube.dart';
 
 class HomeBloc implements BlocBase {
-  ApiYouTube api;
+  ApiYouTube api = ApiYouTube();
   List<VideoModel> videos;
 
   final StreamController<List<VideoModel>> _videosController =
@@ -16,8 +16,6 @@ class HomeBloc implements BlocBase {
   Sink get inSearch => _searchController.sink;
 
   HomeBloc() {
-    api = ApiYouTube();
-
     _searchController.stream.listen(_search);
   }
 
